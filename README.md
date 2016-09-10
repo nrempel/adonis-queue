@@ -1,13 +1,13 @@
-# Adonis Kue Provider
+# Adonis Queue Provider
 
-A [Kue](https://github.com/Automattic/kue) provider for the Adonis framework.
+A job queuing provider that leverages [Bull](https://github.com/OptimalBits/bull) for the AdonisJS framework.
 
 This library provides an easy way to get started with an asynchronous job queue for AdonisJS.
 
 ## Install
 
 ```
-npm install --save adonis-kue
+npm install --save adonis-bull
 ```
 
 ## Configure
@@ -17,16 +17,16 @@ Register it in `bootstrap/app.js`:
 ```javascript
 const providers = [
   ...
-  'adonis-kue/providers/KueProvider'
+  'adonis-queue/providers/QueueProvider'
 ]
 ```
 
-Also consider adding an alias to validation provider.
+Also consider adding an alias to the provider.
 
 ```javascript
 const aliases = {
   ...
-  Kue: 'Adonis/Addons/Kue'
+  Queue: 'Adonis/Addons/Queue'
 }
 ```
 
@@ -35,18 +35,18 @@ Register the commands:
 ```javascript
 const aceProviders = [
   ...
-  'adonis-kue/providers/CommandsProvider'
+  'adonis-queue/providers/CommandsProvider'
 ];
 
 ...
 
 const commands = [
   ...
-  'Adonis/Commands/Kue:Listen'
+  'Adonis/Commands/Queue:Listen'
 ];
 ```
 
-Add a configuration file in `config/kue.js`. For example:
+Add a configuration file in `config/queue.js`. For example:
 
 ```javascript
 'use strict';
@@ -54,19 +54,18 @@ Add a configuration file in `config/kue.js`. For example:
 const Env = use('Env');
 
 module.exports = {
-  prefix: 'q',
-  redis: Env.get('REDIS_URL')
+  redis: {
+    connectionString: 'redis://localhost:6379'
+  }
 };
 
 ```
-
-See the [Kue Documentation](https://github.com/Automattic/kue#redis-connection-settings) for more connection options.
 
 ## Usage
 
 ### Starting the listener
 
-Starting an instance of the kue listener is easy with the included ace command. Simply run `./ace kue:listen`.
+Starting an instance of the queue listener is easy with the included ace command. Simply run `./ace queue:listen`.
 
 The provider looks for jobs in the `app/Jobs` directory of your AdonisJS project and will automatically register a handler for any jobs that it finds.
 
@@ -87,10 +86,10 @@ Jobs are easy to create. They live in `app/Jobs` and they are a simple class. Th
 Now that your job listener is running and ready to do some asynchronous work, you can start dispatching jobs. 
 
 ```javascript
-const kue = use('Kue');
+const queue = use('Queue');
 const Job = require('./app/Jobs/Example');
 const data = { test: 'data' };
-kue.dispatch(Job.key, data);
+queue.dispatch(Job.key, data);
 ```
 
 ## Thanks
