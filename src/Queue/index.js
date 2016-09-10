@@ -29,7 +29,7 @@ class Queue {
    * @public
    */
   getInstance (key) {
-    return Bull(key, this.connectionString);
+    return Bull(key, this.connectionString, {});
   }
 
   /**
