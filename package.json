@@ -1,5 +1,5 @@
 {
-  "name": "adonis-bull",
+  "name": "adonis-queue",
   "version": "1.0.0",
   "description": "Bull provider for the Adonis framework",
   "main": "index.js",
